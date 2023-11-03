@@ -1,0 +1,115 @@
+#!/usr/bin/env bash
+
+# Install additional composer dependencies as you would from the command line.
+echo "
+-------------------------------------------------------------------------------
+Installing Livewire
+-------------------------------------------------------------------------------
+"
+composer require livewire/livewire
+
+# To copy standard files to new lambo project place them in ~/.lambo/includes directory.
+# echo "
+# Copying Include Files
+# "
+# cp -R ~/.lambo/includes/ $PROJECTPATH
+
+echo "
+-------------------------------------------------------------------------------
+Running NPM install
+-------------------------------------------------------------------------------
+"
+npm install
+
+echo "
+-------------------------------------------------------------------------------
+Installing Tailwind
+-------------------------------------------------------------------------------
+"
+npm install -D tailwindcss postcss autoprefixer
+
+echo "
+-------------------------------------------------------------------------------
+Copying Tailwind config file
+-------------------------------------------------------------------------------
+"
+cp -R ~/.lambo/includes/tailwind.config.js $PROJECTPATH
+
+echo "
+-------------------------------------------------------------------------------
+Copying `app.css` file
+-------------------------------------------------------------------------------
+"
+cp -R ~/.lambo/includes/app.css $PROJECTPATH/resources/css
+
+echo "
+-------------------------------------------------------------------------------
+Building assets
+-------------------------------------------------------------------------------
+"
+npm run build
+
+echo "
+-------------------------------------------------------------------------------
+Copying `app.blade.php` layout file
+-------------------------------------------------------------------------------
+"
+
+mkdir -p $PROJECTPATH/resources/views/components/layouts
+
+cp -R ~/.lambo/includes/app.blade.php $PROJECTPATH/resources/views/components/layouts
+
+# To add a git commit after given modifications
+echo "
+-------------------------------------------------------------------------------
+Committing Livewire and Tailwind installations
+-------------------------------------------------------------------------------
+"
+git add .
+git commit -am "Install Livewire and Tailwind."
+
+echo "
+-------------------------------------------------------------------------------
+Creating 'Home' Livewire component
+-------------------------------------------------------------------------------
+"
+php artisan livewire:make home
+
+echo "
+-------------------------------------------------------------------------------
+Copying 'web.php' routes file to inclue 'Home' component
+-------------------------------------------------------------------------------
+"
+cp -fR ~/.lambo/includes/web.php $PROJECTPATH/routes
+
+echo "
+-------------------------------------------------------------------------------
+Deleting 'welcome.blade.php' view
+-------------------------------------------------------------------------------
+"
+rm $PROJECTPATH/resources/views/welcome.blade.php
+
+echo "
+-------------------------------------------------------------------------------
+Committing 'Home' component
+-------------------------------------------------------------------------------
+"
+git add .
+git commit -am "Replace `welcome` with `Home` Livewire component"
+
+
+echo "
+-------------------------------------------------------------------------------
+Creating and migrating database $(basename $PROJECTPATH | sed 's#-#_#')
+-------------------------------------------------------------------------------
+"
+
+mysql -u root -e "create database $(basename $PROJECTPATH | sed 's#-#_#')" && php artisan migrate:fresh
+
+echo "
+-------------------------------------------------------------------------------
+Opening repo in Fork
+-------------------------------------------------------------------------------
+"
+
+fork .

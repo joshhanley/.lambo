@@ -1,0 +1,14 @@
+# PROJECTPATH=
+MESSAGE="Initial commit."
+DEVELOP=false
+CODEEDITOR=code
+BROWSER="/Applications/Google Chrome.app"
+LINK=false
+SECURE=false
+CREATE_DATABASE=false
+MIGRATE_DATABASE=false
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_NAME=
+DB_USERNAME=root
+DB_PASSWORD=
