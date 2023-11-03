@@ -1,6 +1,15 @@
 #!/usr/bin/env bash
 
 # Install additional composer dependencies as you would from the command line.
+
+echo "
+-------------------------------------------------------------------------------
+Changing composer 'minimum-stablility' to 'dev'
+-------------------------------------------------------------------------------
+"
+composer config minimum-stability dev
+
+
 echo "
 -------------------------------------------------------------------------------
 Installing Livewire
